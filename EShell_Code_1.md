@@ -98,4 +98,73 @@
 	[#t{uid = 1,fid = 13},#t{uid = 1,fid = 14}]
 	10>
 
-
+##Erlang Record Match##
+	-record(test,{a,b}).
+	
+	tr(#test{a=1,b=3}=T) ->
+	  io:format("1,3!");
+	tr(#test{} =T  ) ->
+	   io:format("OK");
+	tr(Any) ->
+	   io:format("Bad~n").
+	
+	
+	Erlang R15B (erts-5.9) [source] [64-bit] [smp:2:2] [async-threads:0] [hipe] [kernel-poll:false]
+	
+	Eshell V5.9  (abort with ^G)
+	1> c(v).
+	v.erl:6: Warning: variable 'T' is unused
+	v.erl:8: Warning: variable 'T' is unused
+	v.erl:10: Warning: variable 'Any' is unused
+	v.erl:37: Warning: variable 'H' is unused
+	v.erl:37: Warning: variable 'T' is unused
+	{ok,v}
+	2> rd(test,{a,b}).
+	test
+	3> v:tr(#test{}).
+	OKok
+	4> v:tr(#test{a=1,b=3}).
+	1,3!ok
+	5> v:tr(#test{a=2,b=3}).
+	OKok
+	6>
+	
+	
+	
+	
+	    attributes []
+	'tr'/1 =
+	    %% Line 6
+	    fun (_cor0) ->
+	        case _cor0 of
+	          <T = {'test',1,3}> when 'true' ->
+	              %% Line 7
+	              call 'io':'format'
+	                  ([49|[44|[51|[33]]]])
+	          %% Line 8
+	          <T = {'test',_cor2,_cor3}> when 'true' ->
+	              %% Line 9
+	              call 'io':'format'
+	                  ([79|[75]])
+	          %% Line 10
+	          <Any> when 'true' ->
+	              %% Line 11
+	              call 'io':'format'
+	                  ([66|[97|[100|[126|[110]]]]])
+	        end
+	'reload'/1 =
+	    %% Line 13
+	    fun (_cor0) ->
+	        %% Line 14
+	        case call 'code':'get_object_code'
+	                 (_cor0) of
+	          <{M,B,F}> when 'true' ->
+	              %% Line 15
+	              call 'code':'load_binary'
+	                  (M, F, B)
+	          ( <_cor1> when 'true' ->
+	                primop 'match_fail'
+	                    ({'badmatch',_cor1})
+	            -| ['compiler_generated'] )
+	        end 
+	
